@@ -1,4 +1,4 @@
-package com.soen345.TicketReserve;
+package com.soen345.ticketreserve;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

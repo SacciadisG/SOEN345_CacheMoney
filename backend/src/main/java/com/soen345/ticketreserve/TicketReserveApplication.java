@@ -1,4 +1,4 @@
-package com.soen345.TicketReserve;
+package com.soen345.ticketreserve;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
