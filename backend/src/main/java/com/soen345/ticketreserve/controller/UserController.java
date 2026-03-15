@@ -5,7 +5,6 @@ import com.soen345.ticketreserve.dto.UserResponse;
 import com.soen345.ticketreserve.model.User;
 import com.soen345.ticketreserve.service.UserService;
 import com.soen345.ticketreserve.dto.LoginRequest;
-import com.soen345.ticketreserve.dto.UserResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

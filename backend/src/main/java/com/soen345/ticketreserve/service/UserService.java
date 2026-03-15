@@ -1,6 +1,5 @@
 package com.soen345.ticketreserve.service;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.soen345.ticketreserve.dto.UserRegistrationRequest;
