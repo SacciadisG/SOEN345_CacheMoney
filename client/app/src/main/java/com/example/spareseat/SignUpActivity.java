@@ -177,6 +177,7 @@ public class SignUpActivity extends AppCompatActivity {
                 btnCreateAccount.setEnabled(true);
                 btnCreateAccount.setText("Create Account");
                 if (response.isSuccessful()) {
+                    SessionManager.save(SignUpActivity.this, response.body());
                     startActivity(new Intent(SignUpActivity.this, LoggedInActivity.class));
                     finish();
                 } else {

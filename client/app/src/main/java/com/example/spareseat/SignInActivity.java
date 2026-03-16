@@ -145,6 +145,7 @@ public class SignInActivity extends AppCompatActivity {
                 btnSignIn.setEnabled(true);
                 btnSignIn.setText("Sign In");
                 if (response.isSuccessful()) {
+                    SessionManager.save(SignInActivity.this, response.body());
                     startActivity(new Intent(SignInActivity.this, LoggedInActivity.class));
                     finish();
                 } else {
