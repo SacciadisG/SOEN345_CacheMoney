@@ -2,6 +2,9 @@ package com.soen345.ticketreserve.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -32,6 +35,9 @@ public class User {
         this.role = role;
     }
 
+    @ManyToMany(mappedBy = "attendees")
+    private Set<Event> eventsAttending = new HashSet<>();
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -55,6 +61,10 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public Set<Event> getEventsAttending() {
+        return eventsAttending;
     }
 
     public void setId(Long id) {
