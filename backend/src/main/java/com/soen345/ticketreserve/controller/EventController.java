@@ -33,7 +33,7 @@ public class EventController {
         event.setDescription(request.getDescription());
         event.setEventDate(request.getDate());
         event.setLocation(request.getLocation());
-        event.setCategory("General"); // Default category, can be modified to accept from request
+        event.setCategory(request.getCategory());
         event.setEventCapacity(request.getEventCapacity());
 
         Event createdEvent = eventService.createEvent(event);

@@ -34,7 +34,7 @@ public class EventService {
             throw new BadRequestException("Event location is required");
         }
         if (event.getCategory() == null || event.getCategory().trim().isEmpty()) {
-            throw new BadRequestException("Event category is required");
+            event.setCategory("General");
         }
         if (event.getEventCapacity() <= 0) {
             throw new BadRequestException("Event capacity must be greater than 0");

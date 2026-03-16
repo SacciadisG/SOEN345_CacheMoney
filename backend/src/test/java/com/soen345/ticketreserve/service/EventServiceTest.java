@@ -70,11 +70,16 @@ class EventServiceTest {
     }
 
     @Test
-    void shouldThrowErrorWhenCategoryMissing() {
+    void shouldDefaultCategoryWhenCategoryMissing() {
         Event event = validEvent();
         event.setCategory(null);
 
-        assertThrows(BadRequestException.class, () -> eventService.createEvent(event));
+        when(eventRepository.save(any(Event.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Event result = eventService.createEvent(event);
+
+        assertEquals("General", result.getCategory());
+        verify(eventRepository).save(event);
     }
 
     @Test

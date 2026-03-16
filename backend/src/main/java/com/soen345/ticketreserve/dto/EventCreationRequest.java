@@ -8,7 +8,9 @@ public class EventCreationRequest {
     private String description;
     private LocalDate date;
     private String location;
+    private String category;
     private int eventCapacity;
+    
 
     public EventCreationRequest() {}
 
@@ -29,6 +31,10 @@ public class EventCreationRequest {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public int getEventCapacity() {
@@ -53,6 +59,10 @@ public class EventCreationRequest {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setEventCapacity(int eventCapacity) {
