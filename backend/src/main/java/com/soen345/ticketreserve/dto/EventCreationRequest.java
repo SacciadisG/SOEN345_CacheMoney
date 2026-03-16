@@ -35,6 +35,10 @@ public class EventCreationRequest {
         return eventCapacity;
     }
 
+    public void setOrganizerId(Long organizerId) {
+        this.organizerId = organizerId;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
