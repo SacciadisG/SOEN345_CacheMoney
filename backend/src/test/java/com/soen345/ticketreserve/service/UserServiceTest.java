@@ -203,5 +203,11 @@ class UserServiceTest {
                 () -> userService.loginUser(request));
     }
 
+    @Test
+    void shouldThrowWhenUserIdNotFound() {
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(BadRequestException.class, () -> userService.getUserById(99L));
+    }
 
 }

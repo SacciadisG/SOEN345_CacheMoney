@@ -2,6 +2,7 @@ package com.soen345.ticketreserve.service;
 
 import com.soen345.ticketreserve.exception.BadRequestException;
 import com.soen345.ticketreserve.model.Event;
+import com.soen345.ticketreserve.model.User;
 import com.soen345.ticketreserve.repository.EventRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class EventServiceTest {
+
+    User testOrganizer = new User();
 
     @Mock
     private EventRepository eventRepository;
@@ -112,6 +115,7 @@ class EventServiceTest {
 
     private Event validEvent() {
         Event event = new Event();
+        event.setOrganizer(testOrganizer);
         event.setTitle("Spring Meetup");
         event.setDescription("Community event");
         event.setEventDate(LocalDate.of(2026, 4, 10));
