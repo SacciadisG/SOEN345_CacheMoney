@@ -24,6 +24,10 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
+
+        if(event.getOrganizer() == null) {
+            throw new BadRequestException("Event organizer is required");
+        }
         if (event.getTitle() == null || event.getTitle().trim().isEmpty()) {
             throw new BadRequestException("Event title is required");
         }
