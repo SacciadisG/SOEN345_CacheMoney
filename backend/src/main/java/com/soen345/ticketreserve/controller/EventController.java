@@ -26,7 +26,9 @@ public class EventController {
 
     @PostMapping("/create")
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventCreationRequest request) {
-
+        if (request.getOrganizerId() == null) {
+            throw new BadRequestException("Organizer ID is required");
+        }
         User organizer = userService.getUserById(request.getOrganizerId());
         Event event = new Event();
         event.setOrganizer(organizer);
