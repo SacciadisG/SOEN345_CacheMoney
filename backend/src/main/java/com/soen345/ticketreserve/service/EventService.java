@@ -36,6 +36,9 @@ public class EventService {
         if (event.getCategory() == null || event.getCategory().trim().isEmpty()) {
             throw new BadRequestException("Event category is required");
         }
+        if (event.getEventCapacity() <= 0) {
+            throw new BadRequestException("Event capacity must be greater than 0");
+        }
         return eventRepository.save(event);
     }
 
