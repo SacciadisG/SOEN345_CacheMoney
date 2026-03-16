@@ -6,7 +6,7 @@ import com.soen345.ticketreserve.model.Event;
 import com.soen345.ticketreserve.model.User;
 import com.soen345.ticketreserve.service.EventService;
 import com.soen345.ticketreserve.service.UserService;
-import com.soen345.ticketreserve.exception.BadRequestException;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +26,6 @@ public class EventController {
 
     @PostMapping("/create")
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventCreationRequest request) {
-        if (request.getOrganizerId() == null) {
-            throw new BadRequestException("Organizer ID is required");
-        }
         User organizer = userService.getUserById(request.getOrganizerId());
         Event event = new Event();
         event.setOrganizer(organizer);
