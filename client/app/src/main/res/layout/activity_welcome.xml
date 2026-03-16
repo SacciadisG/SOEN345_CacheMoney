@@ -48,28 +48,10 @@
         android:layout_marginBottom="12dp"
         android:stateListAnimator="@null"
         app:cornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+        app:layout_constraintBottom_toTopOf="@id/tvCopyright"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTagline"/>
-
-    <Button
-        android:id="@+id/btnSignIn"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:text="Sign In"
-        android:textColor="#111111"
-        android:textSize="16sp"
-        android:backgroundTint="#FFFFFF"
-        android:layout_marginHorizontal="24dp"
-        android:stateListAnimator="@null"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnGetStarted"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintBottom_toTopOf="@id/tvCopyright"/>
 
     <TextView
         android:id="@+id/tvCopyright"
