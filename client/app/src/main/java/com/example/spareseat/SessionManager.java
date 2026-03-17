@@ -17,13 +17,20 @@ public class SessionManager {
 
     public static void save(Context context, UserResponse user) {
         SharedPreferences.Editor editor = prefs(context).edit();
-        editor.putBoolean(KEY_LOGGED_IN, true);
-        if (user != null) {
-            editor.putLong(KEY_USER_ID, user.getId() != null ? user.getId() : -1);
+        boolean hasValidUser = user != null && user.getId() != null;
+        editor.putBoolean(KEY_LOGGED_IN, hasValidUser);
+        if (hasValidUser) {
+            editor.putLong(KEY_USER_ID, user.getId());
             editor.putString(KEY_USER_NAME, user.getName());
             editor.putString(KEY_USER_EMAIL, user.getEmail());
             editor.putString(KEY_USER_PHONE, user.getPhoneNumber());
             editor.putString(KEY_USER_ROLE, user.getRole());
+        } else {
+            editor.remove(KEY_USER_ID);
+            editor.remove(KEY_USER_NAME);
+            editor.remove(KEY_USER_EMAIL);
+            editor.remove(KEY_USER_PHONE);
+            editor.remove(KEY_USER_ROLE);
         }
         editor.apply();
     }

@@ -1,0 +1,429 @@
+client/app/src/main/res/xml/network_security_config.xml
+Comment on lines +3 to +5
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+High
+This manifest-level networkSecurityConfig allows cleartext HTTP traffic (even if scoped to 10.0.2.2). If this ships in a release build it weakens transport security; consider restricting cleartext to debug builds only (e.g., via manifest placeholders/product flavors) and using HTTPS in production.
+
+Suggested changeset 1 (1)
+client/app/src/main/res/xml/network_security_config.xml
+Original file line number	Diff line number	Diff line change
+ <?xml version="1.0" encoding="utf-8"?>
+ <network-security-config>
+     <base-config cleartextTrafficPermitted="false" />
+ </network-security-config>
+Unable to commit as this autofix suggestion is now outdated.
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/src/main/java/com/example/spareseat/SessionManager.java
+Comment on lines +20 to +26
+        editor.putBoolean(KEY_LOGGED_IN, true);
+        if (user != null) {
+            editor.putLong(KEY_USER_ID, user.getId() != null ? user.getId() : -1);
+            editor.putString(KEY_USER_NAME, user.getName());
+            editor.putString(KEY_USER_EMAIL, user.getEmail());
+            editor.putString(KEY_USER_PHONE, user.getPhoneNumber());
+            editor.putString(KEY_USER_ROLE, user.getRole());
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+Medium
+save() sets KEY_LOGGED_IN to true even when user is null (or missing an id), which can leave the app in a "logged in" state without any user data. Only mark the session as logged in when a non-null user payload is present (and ideally when it contains a valid id).
+
+Suggested changeset 1 (1)
+client/app/src/main/java/com/example/spareseat/SessionManager.java
+Original file line number	Diff line number	Diff line change
+     public static void save(Context context, UserResponse user) {
+         SharedPreferences.Editor editor = prefs(context).edit();
+         editor.putBoolean(KEY_LOGGED_IN, true);
+         if (user != null) {
+             editor.putLong(KEY_USER_ID, user.getId() != null ? user.getId() : -1);
+         boolean hasValidUser = user != null && user.getId() != null;
+         editor.putBoolean(KEY_LOGGED_IN, hasValidUser);
+         if (hasValidUser) {
+             editor.putLong(KEY_USER_ID, user.getId());
+             editor.putString(KEY_USER_NAME, user.getName());
+             editor.putString(KEY_USER_EMAIL, user.getEmail());
+             editor.putString(KEY_USER_PHONE, user.getPhoneNumber());
+             editor.putString(KEY_USER_ROLE, user.getRole());
+         } else {
+             editor.remove(KEY_USER_ID);
+             editor.remove(KEY_USER_NAME);
+             editor.remove(KEY_USER_EMAIL);
+             editor.remove(KEY_USER_PHONE);
+             editor.remove(KEY_USER_ROLE);
+         }
+         editor.apply();
+     }
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/.idea/vcs.xml
+Comment on lines +1 to +6
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+  </component>
+</project> No newline at end of file
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+Medium
+These IntelliJ/Android Studio project files are committed under client/.idea/, but the repo’s root .gitignore ignores .idea directories. Keeping them in version control can cause noisy diffs and developer-specific configuration conflicts; remove client/.idea/* from the repo and rely on the .gitignore.
+
+Suggested changeset 1 (1)
+client/.idea/vcs.xml
+Original file line number	Diff line number	Diff line change
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+   </component>
+ </project>
+ <!-- Intentionally left without IDE-specific configuration.
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+backend/src/main/java/com/soen345/ticketreserve/service/UserService.java
+Comment on lines +52 to +57
+        String role = request.getRole();
+        if ("HOST".equals(role)) {
+            user.setRole("HOST");
+        } else {
+            user.setRole("CUSTOMER");
+        }
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+High
+This change allows the client to choose the persisted role (including HOST) at registration time. If HOST is intended to have elevated permissions now or in the future, this is a privilege-escalation risk; consider server-side enforcement (e.g., default all self-registrations to CUSTOMER, or require a separate verification/invite flow for HOST).
+
+Suggested changeset 1 (1)
+backend/src/main/java/com/soen345/ticketreserve/service/UserService.java
+Original file line number	Diff line number	Diff line change
+         user.setEmail(hasEmail ? request.getEmail().trim() : null);
+         user.setPhoneNumber(hasPhone ? request.getPhoneNumber().trim() : null);
+         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+         String role = request.getRole();
+         if ("HOST".equals(role)) {
+             user.setRole("HOST");
+         } else {
+             user.setRole("CUSTOMER");
+         }
+         user.setRole("CUSTOMER");
+         return userRepository.save(user);
+     }
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/src/main/java/com/example/spareseat/SignUpActivity.java
+Comment on lines +126 to +186
+    private void attemptRegister() {
+        tilFullName.setError(null);
+        tilEmail.setError(null);
+        tilPassword.setError(null);
+        tilConfirmPassword.setError(null);
+        hideError();
+
+        String name = etFullName != null && etFullName.getText() != null
+                ? etFullName.getText().toString().trim() : "";
+        String identifier = etEmail != null && etEmail.getText() != null
+                ? etEmail.getText().toString().trim() : "";
+        String password = etPassword != null && etPassword.getText() != null
+                ? etPassword.getText().toString() : "";
+        String confirm = etConfirmPassword != null && etConfirmPassword.getText() != null
+                ? etConfirmPassword.getText().toString() : "";
+
+        boolean valid = true;
+
+        if (TextUtils.isEmpty(name)) {
+            tilFullName.setError("Full name is required");
+            valid = false;
+        }
+
+        if (isEmailMode) {
+            if (TextUtils.isEmpty(identifier)) {
+                tilEmail.setError("Email is required");
+                valid = false;
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(identifier).matches()) {
+                tilEmail.setError("Enter a valid email address");
+                valid = false;
+            }
+        } else {
+            if (TextUtils.isEmpty(identifier)) {
+                tilEmail.setError("Phone number is required");
+                valid = false;
+            } else if (identifier.length() < PHONE_MAX_DIGITS) {
+                tilEmail.setError("Phone number must be " + PHONE_MAX_DIGITS + " digits");
+                valid = false;
+            }
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            tilPassword.setError("Password is required");
+            valid = false;
+        } else if (password.length() < 8) {
+            tilPassword.setError("Password must be at least 8 characters");
+            valid = false;
+        } else if (!password.matches(".*[A-Z].*")) {
+            tilPassword.setError("Password must contain at least one uppercase letter");
+            valid = false;
+        } else if (!password.matches(".*[0-9].*")) {
+            tilPassword.setError("Password must contain at least one number");
+            valid = false;
+        }
+
+        if (valid && !confirm.equals(password)) {
+            tilConfirmPassword.setError("Passwords do not match");
+            valid = false;
+        }
+
+        if (!valid) return;
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+Medium
+Registration adds substantial client-side validation (password rules, confirm password, email/phone mode), but there are no tests asserting this behavior. Add unit tests around attemptRegister() validation and error messaging (and/or instrumentation tests) to avoid regressions as the rules evolve.
+
+Suggested changeset 1 (1)
+client/app/src/main/java/com/example/spareseat/SignUpActivity.java
+Original file line number	Diff line number	Diff line change
+             valid = false;
+         }
+         valid = validateRegistrationInput(identifier, password, confirm);
+         if (!valid) {
+             return;
+         }
+         btnCreateAccount.setEnabled(false);
+         btnCreateAccount.setText("Creating account...");
+         String role = isClientRole ? "CUSTOMER" : "HOST";
+         UserRegistrationRequest request = isEmailMode
+                 ? new UserRegistrationRequest(name, identifier, null, password, role)
+                 : new UserRegistrationRequest(name, null, identifier, password, role);
+         ApiClient.getService().register(request).enqueue(new Callback<UserResponse>() {
+             @Override
+             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                 btnCreateAccount.setEnabled(true);
+                 btnCreateAccount.setText("Create Account");
+                 if (response.isSuccessful()) {
+                     SessionManager.save(SignUpActivity.this, response.body());
+                     startActivity(new Intent(SignUpActivity.this, LoggedInActivity.class));
+                     finish();
+                 } else {
+                     showError(parseErrorBody(response, "Registration failed. Please try again."));
+                 }
+             }
+             @Override
+             public void onFailure(Call<UserResponse> call, Throwable t) {
+                 btnCreateAccount.setEnabled(true);
+                 btnCreateAccount.setText("Create Account");
+                 showError("Unable to connect. Please check your internet connection.");
+             }
+         });
+     }
+     // Extracted validation logic to make it easier to unit test `attemptRegister()`.
+     // TODO: Add unit tests covering all validation branches and error messages.
+     boolean validateRegistrationInput(String identifier, String password, String confirm) {
+         boolean valid = true;
+         if (isEmailMode) {
+             if (TextUtils.isEmpty(identifier)) {
+                 tilEmail.setError("Email is required");
+             valid = false;
+         }
+         if (!valid) return;
+         btnCreateAccount.setEnabled(false);
+         btnCreateAccount.setText("Creating account...");
+         String role = isClientRole ? "CUSTOMER" : "HOST";
+         UserRegistrationRequest request = isEmailMode
+                 ? new UserRegistrationRequest(name, identifier, null, password, role)
+                 : new UserRegistrationRequest(name, null, identifier, password, role);
+         ApiClient.getService().register(request).enqueue(new Callback<UserResponse>() {
+             @Override
+             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                 btnCreateAccount.setEnabled(true);
+                 btnCreateAccount.setText("Create Account");
+                 if (response.isSuccessful()) {
+                     SessionManager.save(SignUpActivity.this, response.body());
+                     startActivity(new Intent(SignUpActivity.this, LoggedInActivity.class));
+                     finish();
+                 } else {
+                     showError(parseErrorBody(response, "Registration failed. Please try again."));
+                 }
+             }
+             @Override
+             public void onFailure(Call<UserResponse> call, Throwable t) {
+                 btnCreateAccount.setEnabled(true);
+                 btnCreateAccount.setText("Create Account");
+                 showError("Unable to connect. Please check your internet connection.");
+             }
+         });
+         return valid;
+     }
+     private void showError(String message) {
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/src/main/java/com/example/spareseat/api/ApiClient.java
+Comment on lines +3 to +7
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class ApiClient {
+    private static final String BASE_URL = "http://10.0.2.2:8080/";
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+High
+The API base URL is hardcoded to http://10.0.2.2:8080/ (cleartext + emulator-only). This makes release builds insecure and non-functional off-emulator; consider injecting the base URL per build variant (BuildConfig field/resource) and defaulting to HTTPS for non-debug builds.
+
+Suggested changeset 1 (1)
+client/app/src/main/java/com/example/spareseat/api/ApiClient.java
+Original file line number	Diff line number	Diff line change
+ package com.example.spareseat.api;
+ import com.example.spareseat.BuildConfig;
+ import retrofit2.Retrofit;
+ import retrofit2.converter.gson.GsonConverterFactory;
+ public class ApiClient {
+     private static final String BASE_URL = "http://10.0.2.2:8080/";
+     private static final String BASE_URL =
+             BuildConfig.DEBUG ? "http://10.0.2.2:8080/" : "https://api.example.com/";
+     private static ApiService service;
+     public static ApiService getService() {
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/src/main/java/com/example/spareseat/SignInActivity.java
+Comment on lines +98 to +133
+    private void attemptLogin() {
+        tilEmail.setError(null);
+        tilPassword.setError(null);
+        hideError();
+
+        String identifier = etEmail != null && etEmail.getText() != null
+                ? etEmail.getText().toString().trim() : "";
+        String password = etPassword != null && etPassword.getText() != null
+                ? etPassword.getText().toString() : "";
+
+        boolean valid = true;
+
+        if (isEmailMode) {
+            if (TextUtils.isEmpty(identifier)) {
+                tilEmail.setError("Email is required");
+                valid = false;
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(identifier).matches()) {
+                tilEmail.setError("Enter a valid email address");
+                valid = false;
+            }
+        } else {
+            if (TextUtils.isEmpty(identifier)) {
+                tilEmail.setError("Phone number is required");
+                valid = false;
+            } else if (identifier.length() < PHONE_MAX_DIGITS) {
+                tilEmail.setError("Phone number must be " + PHONE_MAX_DIGITS + " digits");
+                valid = false;
+            }
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            tilPassword.setError("Password is required");
+            valid = false;
+        }
+
+        if (!valid) return;
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+Medium
+The login flow introduces non-trivial validation and session persistence, but there are no unit tests covering validation edge cases (email vs phone mode, phone length, empty password) or the SessionManager behavior. Add JVM unit tests for these cases (and/or instrumentation tests for UI flows) to meet the issue’s acceptance criteria and prevent regressions.
+
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/build.gradle.kts
+Comment on lines +7 to +9
+    compileSdk {
+        version = release(36)
+    }
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+High
+compileSdk { version = release(36) } doesn't match the Android Gradle Plugin DSL and will fail to compile unless a custom release() function is defined (none is imported here). Use the standard compileSdk = 36 (or the project’s intended compile SDK) so the module builds.
+
+Suggested changeset 1 (1)
+client/app/build.gradle.kts
+Original file line number	Diff line number	Diff line change
+ android {
+     namespace = "com.example.spareseat"
+     compileSdk {
+         version = release(36)
+     }
+     compileSdk = 36
+     defaultConfig {
+         applicationId = "com.example.spareseat"
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+client/app/build.gradle.kts
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.material:material:1.11.0")
+Copilot commented 35 minutes ago
+@Copilot
+Copilot
+bot
+35 minutes ago
+Medium
+libs.material is already included via the version catalog, but this file also adds a hard-pinned com.google.android.material:material:1.11.0. Having two different Material versions on the classpath can cause dependency resolution conflicts and unexpected runtime behavior; keep only one source of truth (prefer the version catalog entry).
+
+Suggested changeset 1 (1)
+client/app/build.gradle.kts
+Original file line number	Diff line number	Diff line change
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.ext.junit)
+     androidTestImplementation(libs.espresso.core)
+     implementation("com.google.android.material:material:1.11.0")
+     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+Copilot uses AI. Check for mistakes.
+@hendriktebeng	Reply...
+@hendriktebeng
+Merge branch 'main' of https://github.com/SacciadisG/SOEN345_CacheMoney… 
+a3e4b0e
+@codecov-commenter
+codecov-commenter
+commented
+2 minutes ago
+⚠️ Please install the 'codecov app svg image' to ensure uploads and comments are reliably processed by Codecov.
+
+Codecov Report
+❌ Patch coverage is 42.85714% with 4 lines in your changes missing coverage. Please review.
+
+Files with missing lines	Patch %	Lines
+...345/ticketreserve/dto/UserRegistrationRequest.java	33.33%	2 Missing ⚠️
+...com/soen345/ticketreserve/service/UserService.java	50.00%	1 Missing and 1 partial ⚠️
+📢 Thoughts on this report? Let us know!
+
+Merge info
+All checks have passed
+1 successful check
+
+
+Merging is blocked
+A conversation must be resolved before this pull request can be merged.
