@@ -146,6 +146,48 @@ public class SignUpActivity extends AppCompatActivity {
             valid = false;
         }
 
+        valid = validateRegistrationInput(identifier, password, confirm);
+
+        if (!valid) {
+            return;
+        }
+
+        btnCreateAccount.setEnabled(false);
+        btnCreateAccount.setText("Creating account...");
+
+        String role = isClientRole ? "CUSTOMER" : "HOST";
+        UserRegistrationRequest request = isEmailMode
+                ? new UserRegistrationRequest(name, identifier, null, password, role)
+                : new UserRegistrationRequest(name, null, identifier, password, role);
+
+        ApiClient.getService().register(request).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                btnCreateAccount.setEnabled(true);
+                btnCreateAccount.setText("Create Account");
+                if (response.isSuccessful()) {
+                    SessionManager.save(SignUpActivity.this, response.body());
+                    startActivity(new Intent(SignUpActivity.this, LoggedInActivity.class));
+                    finish();
+                } else {
+                    showError(parseErrorBody(response, "Registration failed. Please try again."));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                btnCreateAccount.setEnabled(true);
+                btnCreateAccount.setText("Create Account");
+                showError("Unable to connect. Please check your internet connection.");
+            }
+        });
+    }
+
+    // Extracted validation logic to make it easier to unit test `attemptRegister()`.
+    // TODO: Add unit tests covering all validation branches and error messages.
+    boolean validateRegistrationInput(String identifier, String password, String confirm) {
+        boolean valid = true;
+
         if (isEmailMode) {
             if (TextUtils.isEmpty(identifier)) {
                 tilEmail.setError("Email is required");
@@ -183,37 +225,7 @@ public class SignUpActivity extends AppCompatActivity {
             valid = false;
         }
 
-        if (!valid) return;
-
-        btnCreateAccount.setEnabled(false);
-        btnCreateAccount.setText("Creating account...");
-
-        String role = isClientRole ? "CUSTOMER" : "HOST";
-        UserRegistrationRequest request = isEmailMode
-                ? new UserRegistrationRequest(name, identifier, null, password, role)
-                : new UserRegistrationRequest(name, null, identifier, password, role);
-
-        ApiClient.getService().register(request).enqueue(new Callback<UserResponse>() {
-            @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                btnCreateAccount.setEnabled(true);
-                btnCreateAccount.setText("Create Account");
-                if (response.isSuccessful()) {
-                    SessionManager.save(SignUpActivity.this, response.body());
-                    startActivity(new Intent(SignUpActivity.this, LoggedInActivity.class));
-                    finish();
-                } else {
-                    showError(parseErrorBody(response, "Registration failed. Please try again."));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                btnCreateAccount.setEnabled(true);
-                btnCreateAccount.setText("Create Account");
-                showError("Unable to connect. Please check your internet connection.");
-            }
-        });
+        return valid;
     }
 
     private void showError(String message) {
