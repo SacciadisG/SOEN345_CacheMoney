@@ -36,7 +36,8 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String COLOR_DARK = "#111111";
 
     private boolean isEmailMode = true;
-    private Button btnEmail, btnPhone, btnCreateAccount;
+    private boolean isClientRole = true;
+    private Button btnEmail, btnPhone, btnCreateAccount, btnRoleClient, btnRoleHost;
     private TextView labelEmail, tvSignInLink, tvError;
     private TextInputLayout tilFullName, tilEmail, tilPassword, tilConfirmPassword;
     private TextInputEditText etFullName, etEmail, etPassword, etConfirmPassword;
@@ -62,6 +63,9 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = (TextInputEditText) tilPassword.getEditText();
         etConfirmPassword = (TextInputEditText) tilConfirmPassword.getEditText();
 
+        btnRoleClient = findViewById(R.id.btnRoleClient);
+        btnRoleHost = findViewById(R.id.btnRoleHost);
+
         btnBack.setOnClickListener(v -> finish());
         tvSignInLink.setOnClickListener(v -> {
             startActivity(new Intent(this, SignInActivity.class));
@@ -69,7 +73,24 @@ public class SignUpActivity extends AppCompatActivity {
         });
         btnEmail.setOnClickListener(v -> setMode(true));
         btnPhone.setOnClickListener(v -> setMode(false));
+        btnRoleClient.setOnClickListener(v -> setRole(true));
+        btnRoleHost.setOnClickListener(v -> setRole(false));
         btnCreateAccount.setOnClickListener(v -> attemptRegister());
+    }
+
+    private void setRole(boolean clientRole) {
+        isClientRole = clientRole;
+        if (clientRole) {
+            btnRoleClient.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(COLOR_SELECTED)));
+            btnRoleClient.setTextColor(Color.parseColor(COLOR_DARK));
+            btnRoleHost.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(COLOR_UNSELECTED_BG)));
+            btnRoleHost.setTextColor(Color.parseColor(COLOR_UNSELECTED_TEXT));
+        } else {
+            btnRoleHost.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(COLOR_SELECTED)));
+            btnRoleHost.setTextColor(Color.parseColor(COLOR_DARK));
+            btnRoleClient.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(COLOR_UNSELECTED_BG)));
+            btnRoleClient.setTextColor(Color.parseColor(COLOR_UNSELECTED_TEXT));
+        }
     }
 
     private void setMode(boolean emailMode) {
@@ -167,9 +188,10 @@ public class SignUpActivity extends AppCompatActivity {
         btnCreateAccount.setEnabled(false);
         btnCreateAccount.setText("Creating account...");
 
+        String role = isClientRole ? "CUSTOMER" : "HOST";
         UserRegistrationRequest request = isEmailMode
-                ? new UserRegistrationRequest(name, identifier, null, password)
-                : new UserRegistrationRequest(name, null, identifier, password);
+                ? new UserRegistrationRequest(name, identifier, null, password, role)
+                : new UserRegistrationRequest(name, null, identifier, password, role);
 
         ApiClient.getService().register(request).enqueue(new Callback<UserResponse>() {
             @Override

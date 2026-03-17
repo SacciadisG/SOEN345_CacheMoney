@@ -49,7 +49,12 @@ public class UserService {
         user.setEmail(hasEmail ? request.getEmail().trim() : null);
         user.setPhoneNumber(hasPhone ? request.getPhoneNumber().trim() : null);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRole("CUSTOMER");
+        String role = request.getRole();
+        if ("HOST".equals(role)) {
+            user.setRole("HOST");
+        } else {
+            user.setRole("CUSTOMER");
+        }
 
         return userRepository.save(user);
     }

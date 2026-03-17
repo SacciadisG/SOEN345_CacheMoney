@@ -255,6 +255,55 @@
                 android:paddingHorizontal="16dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/labelAccountType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account Type"
+            android:textColor="#333333"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword"/>
+
+        <LinearLayout
+            android:id="@+id/roleToggleContainer"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_toggle"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelAccountType">
+
+            <Button
+                android:id="@+id/btnRoleClient"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Client"
+                android:textColor="#111111"
+                android:textSize="14sp"
+                android:backgroundTint="#89F336"
+                android:stateListAnimator="@null"
+                app:cornerRadius="8dp"/>
+
+            <Button
+                android:id="@+id/btnRoleHost"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Event Host"
+                android:textColor="#888888"
+                android:textSize="14sp"
+                android:backgroundTint="@android:color/transparent"
+                android:stateListAnimator="@null"
+                app:cornerRadius="8dp"/>
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="0dp"
@@ -269,7 +318,7 @@
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword"/>
+            app:layout_constraintTop_toBottomOf="@id/roleToggleContainer"/>
 
         <TextView
             android:id="@+id/tvError"
