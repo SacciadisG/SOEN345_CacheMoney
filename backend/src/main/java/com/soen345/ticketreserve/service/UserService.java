@@ -32,7 +32,7 @@ public class UserService {
             throw new BadRequestException("User must provide either email or phone number");
         }
 
-        if (hasEmail && userRepository.existsByEmail(request.getEmail())) {
+        if (hasEmail && userRepository.existsByEmail(request.getEmail().trim().toLowerCase())) {
             throw new BadRequestException("Email is already registered");
         }
 
@@ -46,7 +46,7 @@ public class UserService {
 
         User user = new User();
         user.setName(request.getName().trim());
-        user.setEmail(hasEmail ? request.getEmail().trim() : null);
+        user.setEmail(hasEmail ? request.getEmail().trim().toLowerCase() : null);
         user.setPhoneNumber(hasPhone ? request.getPhoneNumber().trim() : null);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         String role = request.getRole();
@@ -74,7 +74,7 @@ public class UserService {
         Optional<User> userOptional;
 
         if (hasEmail) {
-            userOptional = userRepository.findByEmail(request.getEmail().trim());
+            userOptional = userRepository.findByEmail(request.getEmail().trim().toLowerCase());
         } else {
             userOptional = userRepository.findByPhoneNumber(request.getPhoneNumber().trim());
         }
