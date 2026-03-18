@@ -5,6 +5,7 @@ public class UserRegistrationRequest {
     private String email;
     private String phoneNumber;
     private String password;
+    private String role;
 
     // Constructors
     public UserRegistrationRequest() {}
@@ -26,6 +27,10 @@ public class UserRegistrationRequest {
         return password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -40,5 +45,9 @@ public class UserRegistrationRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
