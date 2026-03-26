@@ -209,5 +209,40 @@ class UserServiceTest {
 
         assertThrows(BadRequestException.class, () -> userService.getUserById(99L));
     }
+    void shouldRegisterEmailAsLowercase() {
+        UserRegistrationRequest request = new UserRegistrationRequest();
+        request.setName("Benjamin");
+        request.setEmail("Ben@Test.COM");
+        request.setPassword("password123");
 
+        when(userRepository.existsByEmail("ben@test.com")).thenReturn(false);
+        when(passwordEncoder.encode("password123")).thenReturn("hashed");
+        when(userRepository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        User result = userService.registerUser(request);
+
+        assertEquals("ben@test.com", result.getEmail());
+    }
+
+    @Test
+    void shouldLoginWithMixedCaseEmail() {
+        LoginRequest request = new LoginRequest();
+        request.setEmail("Ben@Test.COM");
+        request.setPassword("password123");
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("Benjamin");
+        user.setEmail("ben@test.com");
+        user.setPasswordHash("hashedPassword");
+        user.setRole("CUSTOMER");
+
+        when(userRepository.findByEmail("ben@test.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("password123", "hashedPassword")).thenReturn(true);
+
+        User result = userService.loginUser(request);
+
+        assertEquals("ben@test.com", result.getEmail());
+        verify(userRepository).findByEmail("ben@test.com");
+    }
 }
