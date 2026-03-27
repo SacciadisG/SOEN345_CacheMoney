@@ -245,4 +245,8 @@ class UserServiceTest {
         assertEquals("ben@test.com", result.getEmail());
         verify(userRepository).findByEmail("ben@test.com");
     }
+    @Test
+    void shouldThrowWhenIdIsInvalid() {
+        assertThrows(BadRequestException.class, () -> userService.getUserById(-1L));
+    }
 }
