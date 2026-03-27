@@ -11,6 +11,7 @@ import com.soen345.ticketreserve.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
@@ -22,6 +23,15 @@ public class EventController {
     public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
         this.userService = userService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EventResponse>> getAllEvents() {
+        List<EventResponse> responses = eventService.getAllEvents()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping("/create")
@@ -38,21 +48,23 @@ public class EventController {
 
         Event createdEvent = eventService.createEvent(event);
 
-        EventResponse response = new EventResponse(
-                createdEvent.getEventId(),
-                createdEvent.getTitle(),
-                createdEvent.getDescription(),
-                createdEvent.getEventDate(),
-                createdEvent.getLocation(),
-                createdEvent.getEventCapacity()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(createdEvent));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private EventResponse toResponse(Event event) {
+        return new EventResponse(
+                event.getEventId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getEventDate(),
+                event.getLocation(),
+                event.getEventCapacity()
+        );
     }
 }

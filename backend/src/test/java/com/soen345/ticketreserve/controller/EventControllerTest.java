@@ -13,11 +13,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,6 +36,36 @@ class EventControllerTest {
 
         @MockitoBean
         private UserService userService;
+
+    @Test
+    void shouldReturnAllEvents() throws Exception {
+        Event eventOne = new Event();
+        eventOne.setEventId(1L);
+        eventOne.setTitle("Spring Meetup");
+        eventOne.setDescription("Community event");
+        eventOne.setEventDate(LocalDate.of(2026, 4, 10));
+        eventOne.setLocation("Montreal");
+        eventOne.setEventCapacity(120);
+
+        Event eventTwo = new Event();
+        eventTwo.setEventId(2L);
+        eventTwo.setTitle("Summer Concert");
+        eventTwo.setDescription("Live music");
+        eventTwo.setEventDate(LocalDate.of(2026, 8, 21));
+        eventTwo.setLocation("Toronto");
+        eventTwo.setEventCapacity(350);
+
+        when(eventService.getAllEvents()).thenReturn(List.of(eventOne, eventTwo));
+
+        mockMvc.perform(get("/api/events"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].eventId").value(1))
+                .andExpect(jsonPath("$[0].title").value("Spring Meetup"))
+                .andExpect(jsonPath("$[0].date").value("2026-04-10"))
+                .andExpect(jsonPath("$[1].eventId").value(2))
+                .andExpect(jsonPath("$[1].title").value("Summer Concert"))
+                .andExpect(jsonPath("$[1].date").value("2026-08-21"));
+    }
 
     @Test
     void shouldCreateEvent() throws Exception {
