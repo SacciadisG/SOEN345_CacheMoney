@@ -118,6 +118,37 @@ class EventServiceTest {
         assertThrows(BadRequestException.class, () -> eventService.deleteEvent(6L));
     }
 
+    @Test
+    void testReturnAllEvents() {
+        Event event1 = validEvent();
+        event1.setEventId(1L);
+        Event event2 = validEvent();
+        event2.setEventId(2L);
+
+        when(eventRepository.findAll()).thenReturn(java.util.List.of(event1, event2));
+
+        java.util.List<Event> result = eventService.getAllEvents();
+
+        assertEquals(2, result.size());
+        verify(eventRepository).findAll();
+    }
+
+    @Test
+    void shouldThrowErrorOrganizerMissing() {
+        Event event = validEvent();
+        event.setOrganizer(null);
+
+        assertThrows(BadRequestException.class, () -> eventService.createEvent(event));
+    }
+
+    @Test
+    void shouldThrowErrorWhenEventSizeIsNegative() {
+        Event event = validEvent();
+        event.setEventCapacity(-10);
+
+        assertThrows(BadRequestException.class, () -> eventService.createEvent(event));
+    }
+
     private Event validEvent() {
         Event event = new Event();
         event.setOrganizer(testOrganizer);
