@@ -178,7 +178,7 @@ public class LoggedInActivity extends AppCompatActivity {
 
             boolean locMatch  = selectedLocation.equals("All")  || selectedLocation.equals(e.getLocation());
             boolean catMatch  = selectedCategory.equals("All")  || selectedCategory.equals(cat);
-            boolean dateMatch = matchesDateFilter(e.getDate());
+            boolean dateMatch = matchesDateFilter(selectedDate, e.getDate());
             boolean search    = searchQuery.isEmpty()
                     || (e.getTitle() != null       && e.getTitle().toLowerCase().contains(searchQuery))
                     || (e.getDescription() != null && e.getDescription().toLowerCase().contains(searchQuery))
@@ -202,8 +202,8 @@ public class LoggedInActivity extends AppCompatActivity {
         }
     }
 
-    private boolean matchesDateFilter(String eventDateStr) {
-        if (selectedDate.equals("All")) return true;
+    static boolean matchesDateFilter(String selectedDate, String eventDateStr) {
+        if (selectedDate == null || selectedDate.equals("All")) return true;
         if (eventDateStr == null || eventDateStr.isEmpty()) return false;
         try {
             Date eventDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(eventDateStr);
