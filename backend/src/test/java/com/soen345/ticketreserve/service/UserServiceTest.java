@@ -204,6 +204,11 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldThrowWhenUserIdNotFound() {
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(BadRequestException.class, () -> userService.getUserById(99L));
+    }
     void shouldRegisterEmailAsLowercase() {
         UserRegistrationRequest request = new UserRegistrationRequest();
         request.setName("Benjamin");
@@ -240,6 +245,8 @@ class UserServiceTest {
         assertEquals("ben@test.com", result.getEmail());
         verify(userRepository).findByEmail("ben@test.com");
     }
-
-
+    @Test
+    void shouldThrowWhenIdIsInvalid() {
+        assertThrows(BadRequestException.class, () -> userService.getUserById(-1L));
+    }
 }

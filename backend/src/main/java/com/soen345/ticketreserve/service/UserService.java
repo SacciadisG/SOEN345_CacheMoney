@@ -88,4 +88,12 @@ public class UserService {
 
         return user;
     }
+
+    public User getUserById(Long id) {
+        if (id == null || id <= 0) {
+            throw new BadRequestException("Invalid user ID");
+        }
+        return userRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("User not found with ID: " + id));
+    }
 }
