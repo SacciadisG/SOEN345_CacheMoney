@@ -34,6 +34,15 @@ public class EventController {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/organizer/{organizerId}")
+    public ResponseEntity<List<EventResponse>> getEventsByOrganizer(@PathVariable Long organizerId) {
+        List<EventResponse> responses = eventService.getEventsByOrganizerId(organizerId)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+        return ResponseEntity.ok(responses);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventCreationRequest request) {
         User organizer = userService.getUserById(request.getOrganizerId());
@@ -74,6 +83,7 @@ public class EventController {
     private EventResponse toResponse(Event event) {
         return new EventResponse(
                 event.getEventId(),
+                event.getOrganizer() != null ? event.getOrganizer().getId() : null,
                 event.getTitle(),
                 event.getDescription(),
                 event.getEventDate(),

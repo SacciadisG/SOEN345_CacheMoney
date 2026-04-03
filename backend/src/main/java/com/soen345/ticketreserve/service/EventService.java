@@ -18,6 +18,10 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public List<Event> getEventsByOrganizerId(Long organizerId) {
+        return eventRepository.findByOrganizer_Id(organizerId);
+    }
+
     public Event getEventById(Long eventId) {
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new BadRequestException("Event not found with id: " + eventId));
