@@ -46,6 +46,29 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    public Event updateEvent(Long eventId, Event updates) {
+        Event existing = getEventById(eventId);
+        if (updates.getTitle() == null || updates.getTitle().trim().isEmpty()) {
+            throw new BadRequestException("Event title is required");
+        }
+        if (updates.getEventDate() == null) {
+            throw new BadRequestException("Event date is required");
+        }
+        if (updates.getLocation() == null || updates.getLocation().trim().isEmpty()) {
+            throw new BadRequestException("Event location is required");
+        }
+        if (updates.getEventCapacity() <= 0) {
+            throw new BadRequestException("Event capacity must be greater than 0");
+        }
+        existing.setTitle(updates.getTitle());
+        existing.setDescription(updates.getDescription());
+        existing.setEventDate(updates.getEventDate());
+        existing.setLocation(updates.getLocation());
+        existing.setCategory(updates.getCategory() == null || updates.getCategory().trim().isEmpty() ? "General" : updates.getCategory());
+        existing.setEventCapacity(updates.getEventCapacity());
+        return eventRepository.save(existing);
+    }
+
     public void deleteEvent(Long eventId) {
         if (!eventRepository.existsById(eventId)) {
             throw new BadRequestException("Event not found with id: " + eventId);

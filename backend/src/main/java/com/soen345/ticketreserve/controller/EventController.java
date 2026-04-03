@@ -51,6 +51,20 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(createdEvent));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<EventResponse> updateEvent(@PathVariable Long id, @RequestBody EventCreationRequest request) {
+        Event updates = new Event();
+        updates.setTitle(request.getTitle());
+        updates.setDescription(request.getDescription());
+        updates.setEventDate(request.getDate());
+        updates.setLocation(request.getLocation());
+        updates.setCategory(request.getCategory());
+        updates.setEventCapacity(request.getEventCapacity());
+
+        Event updatedEvent = eventService.updateEvent(id, updates);
+        return ResponseEntity.ok(toResponse(updatedEvent));
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
