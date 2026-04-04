@@ -173,7 +173,7 @@ public class HostDashboardActivity extends AppCompatActivity {
                     tilTitle.setError("Required");
                     valid = false;
                 }
-                if (TextUtils.isEmpty(date) || !date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                if (!isValidDateFormat(date)) {
                     tilDate.setError("Required — use YYYY-MM-DD");
                     valid = false;
                 }
@@ -329,6 +329,10 @@ public class HostDashboardActivity extends AppCompatActivity {
         tvEmpty.setText(message);
         llEmpty.setVisibility(View.VISIBLE);
         rvHostEvents.setVisibility(View.GONE);
+    }
+
+    public static boolean isValidDateFormat(String date) {
+        return date != null && !date.isEmpty() && date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
 
     private static String text(TextInputEditText et) {
