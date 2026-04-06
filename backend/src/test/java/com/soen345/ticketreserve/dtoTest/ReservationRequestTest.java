@@ -11,21 +11,21 @@ class ReservationRequestTest {
     void shouldCreateReservationRequestAndUseGettersSetters() {
         ReservationRequest request = new ReservationRequest();
 
-        request.setCustomerEmail("test@example.com");
-        request.setEventName("Movie Night");
+        request.setUserId(1L);
+        request.setEventId(2L);
         request.setQuantity(2);
 
-        assertEquals("test@example.com", request.getCustomerEmail());
-        assertEquals("Movie Night", request.getEventName());
+        assertEquals(1L, request.getUserId());
+        assertEquals(2L, request.getEventId());
         assertEquals(2, request.getQuantity());
     }
 
     @Test
     void shouldCreateReservationRequestWithConstructor() {
-        ReservationRequest request = new ReservationRequest("test@example.com", "Movie Night", 2);
+        ReservationRequest request = new ReservationRequest(1L, 2L, 2);
 
-        assertEquals("test@example.com", request.getCustomerEmail());
-        assertEquals("Movie Night", request.getEventName());
+        assertEquals(1L, request.getUserId());
+        assertEquals(2L, request.getEventId());
         assertEquals(2, request.getQuantity());
     }
 }

@@ -10,16 +10,21 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customerEmail;
-    private String eventName;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "event_id", referencedColumnName = "eventId")
+    private Event event;
     private int quantity;
 
     public Reservation() {
     }
 
-    public Reservation(String customerEmail, String eventName, int quantity) {
-        this.customerEmail = customerEmail;
-        this.eventName = eventName;
+    public Reservation(User user, Event event, int quantity) {
+        this.user = user;
+        this.event = event;
         this.quantity = quantity;
     }
 
@@ -27,12 +32,13 @@ public class Reservation {
         return id;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+
+    public User getUser() {
+        return user;
     }
 
-    public String getEventName() {
-        return eventName;
+    public Event getEvent() {
+        return event;
     }
 
     public int getQuantity() {
@@ -43,12 +49,13 @@ public class Reservation {
         this.id = id;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public void setQuantity(int quantity) {

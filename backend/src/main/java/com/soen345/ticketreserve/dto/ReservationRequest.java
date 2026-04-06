@@ -6,12 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public class ReservationRequest {
 
-    @Email(message = "Email must be valid")
-    @NotBlank(message = "Customer email is required")
-    private String customerEmail;
+    private Long userId;
 
-    @NotBlank(message = "Event name is required")
-    private String eventName;
+    private Long eventId;
 
     @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
@@ -19,30 +16,34 @@ public class ReservationRequest {
     public ReservationRequest() {
     }
 
-    public ReservationRequest(String customerEmail, String eventName, int quantity) {
-        this.customerEmail = customerEmail;
-        this.eventName = eventName;
+    public ReservationRequest(Long userId, Long eventId, int quantity) {
+        this.userId = userId;
+        this.eventId = eventId;
         this.quantity = quantity;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+
+    public Long getUserId() {
+        return userId;
     }
 
-    public String getEventName() {
-        return eventName;
+
+    public Long getEventId() {
+        return eventId;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public void setQuantity(int quantity) {
