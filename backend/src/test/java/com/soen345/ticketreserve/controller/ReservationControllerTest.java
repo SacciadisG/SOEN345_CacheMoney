@@ -1,6 +1,7 @@
 package com.soen345.ticketreserve.controller;
 
 import com.soen345.ticketreserve.dto.ReservationResponse;
+import com.soen345.ticketreserve.dto.ReservationRequest;
 import com.soen345.ticketreserve.service.ReservationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,8 +33,8 @@ class ReservationControllerTest {
     void shouldCreateReservation() throws Exception {
         String requestJson = """
                 {
-                  "customerEmail": "test@example.com",
-                  "eventName": "Movie Night",
+                  "userId": 1,
+                  "eventId": 2,
                   "quantity": 2
                 }
                 """;
@@ -54,5 +57,11 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.customerEmail").value("test@example.com"))
                 .andExpect(jsonPath("$.eventName").value("Movie Night"))
                 .andExpect(jsonPath("$.quantity").value(2));
+
+        verify(reservationService).createReservation(argThat((ReservationRequest request) ->
+            request.getUserId().equals(1L)
+                && request.getEventId().equals(2L)
+                && request.getQuantity() == 2
+        ));
     }
 }
