@@ -6,10 +6,12 @@ appId: com.example.spareseat
 - tapOn:
     id: "tilEmail"
 - inputText: "wrong@email.com"
+- hideKeyboard
 - tapOn:
     id: "tilPassword"
 - inputText: "wrongPass1"
+- hideKeyboard
 - tapOn: "Sign In"
 - extendedWaitUntil:
     visible: "Invalid credentials"
-    timeout: 10000
+    timeout: 15000

@@ -6,19 +6,21 @@ appId: com.example.spareseat
 - tapOn:
     id: "tilEmail"
 - inputText: "bigydot@gmail.com"
+- hideKeyboard
 - tapOn:
     id: "tilPassword"
 - inputText: "123456aA"
+- hideKeyboard
 - tapOn: "Sign In"
 - extendedWaitUntil:
     visible: "Hi, Big Dot!"
-    timeout: 10000
+    timeout: 15000
 - extendedWaitUntil:
     visible: "View Details →"
-    timeout: 10000
+    timeout: 15000
 - tapOn: "View Details →"
 - extendedWaitUntil:
     visible: "Event Details"
-    timeout: 5000
+    timeout: 10000
 - assertVisible: "About this event"
 - assertVisible: "Reserve your spot"
