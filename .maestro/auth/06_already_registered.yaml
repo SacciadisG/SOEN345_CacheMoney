@@ -1,0 +1,22 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn: "Sign Up"
+- tapOn:
+    id: "tilFullName"
+- inputText: "Test User"
+- tapOn:
+    id: "tilEmail"
+- inputText: "bigydot@gmail.com"
+- tapOn:
+    id: "tilPassword"
+- inputText: "Test1234A"
+- tapOn:
+    id: "tilConfirmPassword"
+- inputText: "Test1234A"
+- tapOn: "Create Account"
+- extendedWaitUntil:
+    visible: "Email is already registered"
+    timeout: 10000

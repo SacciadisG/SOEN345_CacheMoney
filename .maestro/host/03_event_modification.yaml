@@ -1,0 +1,77 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn: "Phone"
+- tapOn:
+    id: "tilEmail"
+- inputText: "4505140000"
+- tapOn:
+    id: "tilPassword"
+- inputText: "123456aA"
+- tapOn: "Sign In"
+- extendedWaitUntil:
+    visible: "Host Dashboard"
+    timeout: 10000
+# Cleanup: remove leftover from any previous failed run before starting
+- runFlow:
+    when:
+      visible: "Event After Edit"
+    commands:
+      - tapOn:
+          text: "More options"
+          rightOf: "Event After Edit"
+      - tapOn: "Delete"
+      - tapOn: "Delete"
+- runFlow:
+    when:
+      visible: "Event To Edit"
+    commands:
+      - tapOn:
+          text: "More options"
+          rightOf: "Event To Edit"
+      - tapOn: "Delete"
+      - tapOn: "Delete"
+- tapOn: "+ Create"
+- tapOn:
+    id: "etTitle"
+- inputText: "Event To Edit"
+- tapOn:
+    id: "etDate"
+- inputText: "2026-12-01"
+- tapOn:
+    id: "etLocation"
+- inputText: "Montreal"
+- tapOn:
+    id: "etCapacity"
+- inputText: "20"
+- tapOn: "Create"
+- extendedWaitUntil:
+    visible: "Event To Edit"
+    timeout: 10000
+- waitForAnimationToEnd
+- tapOn:
+    text: "More options"
+    rightOf: "Event To Edit"
+- tapOn: "Edit"
+- assertVisible: "Title *"
+- tapOn:
+    id: "etTitle"
+- eraseText: 50
+- inputText: "Event After Edit"
+- tapOn: "Save"
+- extendedWaitUntil:
+    visible: "Event After Edit"
+    timeout: 10000
+- waitForAnimationToEnd
+# Cleanup: delete the modified event so host stays at 2 events
+- tapOn:
+    text: "More options"
+    rightOf: "Event After Edit"
+- tapOn: "Delete"
+- assertVisible: "Delete Event"
+- tapOn: "Delete"
+- extendedWaitUntil:
+    notVisible: "Event After Edit"
+    timeout: 10000

@@ -1,0 +1,24 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn: "Sign Up"
+- tapOn:
+    id: "tilFullName"
+- inputText: "Test User Phone"
+- tapOn: "Phone"
+- evalScript: ${output.phone = String(Math.floor(Math.random() * 9000000000) + 1000000000)}
+- tapOn:
+    id: "tilEmail"
+- inputText: ${output.phone}
+- tapOn:
+    id: "tilPassword"
+- inputText: "Test1234A"
+- tapOn:
+    id: "tilConfirmPassword"
+- inputText: "Test1234A"
+- tapOn: "Create Account"
+- extendedWaitUntil:
+    visible: "Log Out"
+    timeout: 10000

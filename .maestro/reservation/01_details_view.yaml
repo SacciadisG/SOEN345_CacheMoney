@@ -1,0 +1,24 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn:
+    id: "tilEmail"
+- inputText: "bigydot@gmail.com"
+- tapOn:
+    id: "tilPassword"
+- inputText: "123456aA"
+- tapOn: "Sign In"
+- extendedWaitUntil:
+    visible: "Hi, Big Dot!"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "View Details →"
+    timeout: 10000
+- tapOn: "View Details →"
+- extendedWaitUntil:
+    visible: "Event Details"
+    timeout: 5000
+- assertVisible: "About this event"
+- assertVisible: "Reserve your spot"

@@ -1,0 +1,47 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn:
+    id: "tilEmail"
+- inputText: "bigydot@gmail.com"
+- tapOn:
+    id: "tilPassword"
+- inputText: "123456aA"
+- tapOn: "Sign In"
+- extendedWaitUntil:
+    visible: "Hi, Big Dot!"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "View Details →"
+    timeout: 10000
+- tapOn:
+    id: "etSearch"
+- inputText: "Clash Royale"
+- assertVisible: "Clash Royale Tournament"
+- tapOn: "View Details →"
+- extendedWaitUntil:
+    visible: "Event Details"
+    timeout: 5000
+- tapOn:
+    id: "etQuantity"
+- eraseText: 10
+- inputText: "1"
+- tapOn: "Sign Up For Event"
+- tapOn:
+    id: "btnBack"
+- tapOn: "My Reservations"
+- extendedWaitUntil:
+    visible: "My Reservations"
+    timeout: 5000
+- extendedWaitUntil:
+    visible: "Clash Royale Tournament"
+    timeout: 10000
+# Cleanup: cancel the reservation so next tests start fresh
+- tapOn: "Cancel Reservation"
+- assertVisible: "Cancel reservation?"
+- tapOn: "Cancel reservation"
+- extendedWaitUntil:
+    notVisible: "Cancel reservation?"
+    timeout: 5000

@@ -1,0 +1,23 @@
+appId: com.example.spareseat
+---
+- launchApp:
+    clearState: true
+- tapOn: "Get Started"
+- tapOn: "Sign Up"
+- tapOn:
+    id: "tilFullName"
+- inputText: "Test User"
+- evalScript: ${output.email = 'testuser_' + Date.now() + '@test.com'}
+- tapOn:
+    id: "tilEmail"
+- inputText: ${output.email}
+- tapOn:
+    id: "tilPassword"
+- inputText: "Test1234A"
+- tapOn:
+    id: "tilConfirmPassword"
+- inputText: "Test1234A"
+- tapOn: "Create Account"
+- extendedWaitUntil:
+    visible: "Log Out"
+    timeout: 10000
