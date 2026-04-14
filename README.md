@@ -3,9 +3,6 @@ The Ticket Reservation Application is a Java-based web system designed to simpli
 
 The system is designed to serve two main user groups: customers and event administrators. While customers can manage their reservations and receive confirmations via email, administrators are responsible for creating, updating, and canceling events. Built with scalability and usability in mind, the application supports concurrent users and provides a simple, user-friendly interface for an efficient booking experience.
 
-This project was created in the context of Concordia University's Software Testing course (SOEN 345)
-
-The following are the members who contributed in the development of the project:
 
 | Name | Student ID| 
 |-----------------|-----------------|
