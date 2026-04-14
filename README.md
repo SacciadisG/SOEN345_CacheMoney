@@ -20,50 +20,34 @@ maestro test .\.maestro\
 
 Clone the repository and follow the steps:
 
-**Backend (Spring boot)**
+**Backend (Spring Boot)**
 ### 1. Requirements
-Java 17+
-
-Maven
+- Java 17+
+- Maven (wrapper included)
 
 ### 2. Configuration
-The backend uses PostgreSQL (Supabase) and requires no local DB setup by default.
+The backend uses PostgreSQL (Supabase) and Gmail SMTP for mail services. **Do not edit `application.properties` directly.**
 
-Some features make use of mail services, which are configured for Gmail SMTP
+Instead, copy the example environment file and fill in your credentials:
 
-The structure of your application.properties (in backend/src/main/resources) file should looklike this:
+```sh
+cd backend
+cp .env.example .env
+# On Windows, use: copy .env.example .env
+```
+
+Edit the new `.env` file to provide your database and mail credentials. Example:
 
 ```
-# Application name
-spring.application.name=TicketReserve
-
-# PostgreSQL connection (Supabase)
-spring.datasource.url=jdbc:postgresql://<HOST>:5432/<DB_NAME>?sslmode=require
-spring.datasource.username=<DB_NAME>
-spring.datasource.password=<DB_PASSWORD>
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-# JPA / Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-
-# Server
-server.port=8080
-
-spring.jpa.open-in-view=false
-
-# Mail services
-
-# Gmail SMTP settings
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=<YOUR_GMAIL>
-spring.mail.password=<YOUR_APP_PASSWORD>
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
+SPRING_DATASOURCE_URL=jdbc:postgresql://your-host:5432/your-db?sslmode=require
+SPRING_DATASOURCE_USERNAME=your-db-username
+SPRING_DATASOURCE_PASSWORD=your-db-password
+SPRING_MAIL_USERNAME=your-email@gmail.com
+SPRING_MAIL_PASSWORD=your-gmail-app-password
 ```
+
+The backend will automatically load these values at startup.
+
 ### 3. Run the backend
 
 - On Windows
@@ -77,14 +61,15 @@ cd backend
 cd backend
 ./mvnw spring-boot:run
 ```
+
 ---
 
-Frontend (Android)
+**Frontend (Android)**
 
 ### 1. Requirements
 - Android Studio (Recommended)
 - JDK 11+
-- Gradle
+- Gradle (wrapper included)
 
 ### 2. Build and Run
 - Open the *client* folder in Android Studio
